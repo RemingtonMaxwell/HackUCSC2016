@@ -22,10 +22,38 @@ def index():
 
 def add_post():
     form=SQLFORM(db.posts, fields=['title', 'desc','image', 'board'])
+    form.vars.company=auth.user.company
     if form.process().accepted:
         session.flash=T('The post has been added')
         redirect(URL('default', 'index'))
     return dict(form=form)
+
+def lunch():
+    board = db(db.boards.title=="Lunch").select().first()  #only lunch posts
+    print board
+    #company=db(db.posts.company==auth.user.company).select().first()
+   # print company
+    post_list=db(db.posts.board==board).select()
+    return dict(post_list=post_list)
+
+def questions():
+    board = db(db.boards.title=="Forum").select().first()  # get post ID from request
+    print board
+    post_list=db(db.posts.board==board).select()
+    return dict()
+
+def activities():
+    board = db(db.boards.title=="Activity").select().first()  # get post ID from request
+   # print board
+    #post_list=None
+    if auth.user_id is not None:
+        company=db(db.companies.id==auth.user.company).select().first()
+    #print company
+
+   # print posts.com
+        post_list=db((db.posts.board==board)& (db.posts.company==company)).select()
+
+    return dict(post_list=post_list)
 
 def user():
     """

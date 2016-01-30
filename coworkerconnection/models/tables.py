@@ -12,14 +12,15 @@ db.define_table('boards',
                 )
 db.define_table('posts',
                 Field('post_id', default = web2py_uuid(), readable=False, writable=False),
-                Field('title'),
+                Field('title','text'),
                 Field('desc', 'text'),
                 Field('created_on', 'datetime'),
                 Field('board', 'reference boards', requires=IS_IN_DB(db,db.boards,'%(title)s')),
-                Field('last_update', 'datetime'),
-                Field('created_by'),
                 Field('image', type='upload'),
-                Field('user_id'),
+                Field('created_by','reference auth_user', default=auth.user_id),
                 Field('stars','integer'),
-                Field('company', 'reference companies', requires=IS_IN_DB(db,db.companies,'%(name)s')),
+                Field('company', 'reference companies', requires=IS_IN_DB(db,db.companies,'%(name)s')),#, default=auth.user.company),
                 )
+
+db.posts.created_on.default=datetime.utcnow()
+
