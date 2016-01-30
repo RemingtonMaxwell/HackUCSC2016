@@ -1,52 +1,147 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
-{{block header}}
-    <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
-    </header>
-{{end}}
-
-{{if 'message' in globals():}}
-<h2>{{=message}}</h2>
-<p class="lead">{{=T('How did you get here?')}}</p>
-<ol>
-  <li>{{=T('You are successfully running web2py')}}</li>
-  <li>{{=XML(T('You visited the url %s', A(request.env.path_info,_href=request.env.path_info)))}}</li>
-  <li>{{=XML(T('Which called the function %s located in the file %s',
-    (A(request.function+'()',_href='#'),
-    A('web2py/applications/%(application)s/controllers/%(controller)s.py' % request,
-    _href=URL('admin','default','peek', args=(request.application,'controllers',request.controller+'.py'))))))}}</li>
-  <li>{{=XML(T('The output of the file is a dictionary that was rendered by the view %s',
-    A('web2py/applications/%(application)s/views/%(controller)s/index.html' % request,
-    _href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))))}}</li>
-  <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
-</ol>
-{{elif 'content' in globals():}}
-{{=content}}
+{{block head}}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!--Display Loading Screen-->
+    <script type="text/javascript">
+    $(window).load(function() {
+	    $(".loader").fadeOut("slow");
+    })
+    </script>
+    </head>
+    <!--Initiate Tabs-->
+    <script>
+    $(document).ready(function(){
+        $(".nav-tabs a").click(function(){
+            $(this).tab('show');
+        });
+    });
+    </script>
+{{if auth.user_id is None:}}
+    <div id="homepage">
+        <div id="login_page">
+            {{=A('Login', _class='btn btn-primary', _href=URL('default', 'user', args=['login']))}}
+            {{=A('Register', _class='btn btn-success', _href=URL('default', 'user', args=['register']))}}
 {{else:}}
-{{=BEAUTIFY(response._vars)}}
+    {{=A('Logout', _class='btn btn-primary', _href=URL('default', 'user', args=['logout']))}}
 {{pass}}
+        {{=A('Home Page', _class='btn btn-info', _href=URL('default', 'index'))}}
+{{if not auth.user_id is None:}}
+    {{=A('Create New Post', _class='btn btn-success', _href=URL('default','add_post'))}}
+{{pass}}
+                        </div>
+    </div>
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="main-heading">
+                    <h1>Welcome to Coworker Connection!</h1>
+                    <span class="subheading">A Place for Connecting with Coworkers.</span>
+                </div>
+            </div>
+        </div>
+        </div>
 
-{{block right_sidebar}}
-<div class="panel panel-info">
-  <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
-      href="{{=URL('admin','default','index')}}">
-      <i class="glyphicon glyphicon-cog"></i>
-      {{=T("admin")}}
-    </a></h3></div>
-  <div class="panel-body">
-    {{=T("Don't know what to do?")}}
-  </div>
-  <ul class="list-group">
-    <li class="list-group-item">{{=A(T("Online examples"), _href=URL('examples','default','index'))}}</li>
-    <li class="list-group-item"><a href="http://web2py.com">web2py.com</a></li>
-    <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
-  </ul>
-</div>
-{{end}}
+
+       </header>
+             <ul class="tabs">
+                 <li><a href="#home">Home</a></li>
+                 <li><a href="#lunch">Lunch</a></li>
+                 <li><a href="#activity">Activity</a></li>
+                 <li><a href="#forum">Forum</a></li>
+            </ul>
+
+
+    <div class="container">
+        <div id="home" class="tab">
+        This is the home page.
+        </div>
+        <div id="lunch" class="tab">
+            {{for post in post_list:}}
+                    {{=A(SPAN(post.title), _class='board', _href=URL('default', 'show_posts', args=[post.id, post.title]))}}
+            {{pass}}
+        </div>
+        <div id="activity" class="tab">
+        This is the activity page.
+        </div>
+        <div id="forum" class="tab">
+        This is the forum page.
+        </div>
+
+    </div>
+
+
+
+
+<script>
+    $(document).ready(function(){
+/*Jquery Tabs tutorial http://www.jacklmoore.com/notes/jquery-tabs/*/
+        $('ul.tabs').each(function(){
+
+    // For each set of tabs, we want to keep track of
+    // which tab is active and it's associated content
+    var $active, $content, $links = $(this).find('a');
+
+    // If the location.hash matches one of the links, use that as the active tab.
+    // If no match is found, use the first link as the initial active tab.
+    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+      $active =$($links[0]);
+    $active.addClass('active');
+
+    $content = $($active[0].hash);
+    // Hide the remaining content
+    $links.not($active).each(function () {
+      $(this.hash).hide();
+    });
+
+    // Bind the click event handler
+    $(this).on('click', 'a', function(e){
+      // Make the old tab inactive.
+      $active.removeClass('active');
+      $content.hide();
+
+      // Update the variables with the new link and content
+      $active = $(this);
+      $content = $(this.hash);
+
+      // Make the tab active.
+      $active.addClass('active');
+      $content.show();
+
+      // Prevent the anchor's default click action
+      e.preventDefault();
+    });
+            $active =$($links[0]);
+    $active.addClass('active');
+
+    $content = $($active[0].hash);
+    // Hide the remaining content
+    $links.not($active).each(function () {
+      $(this.hash).hide();
+    });
+
+    // Bind the click event handler
+    $(this).on('click', 'a', function(e){
+      // Make the old tab inactive.
+      $active.removeClass('active');
+      $content.hide();
+
+      // Update the variables with the new link and content
+      $active = $(this);
+      $content = $(this.hash);
+
+      // Make the tab active.
+      $active.addClass('active');
+      $content.show();
+
+      // Prevent the anchor's default click action
+      e.preventDefault();
+    });
+  });
+    });
+</script>
+
+
