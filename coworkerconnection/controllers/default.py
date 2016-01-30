@@ -45,13 +45,25 @@ def questions():
 def activities():
     board = db(db.boards.title=="Activity").select().first()  # get post ID from request
    # print board
-    #post_list=None
+    post_list=None
     if auth.user_id is not None:
         company=db(db.companies.id==auth.user.company).select().first()
     #print company
 
    # print posts.com
-        post_list=db((db.posts.board==board)& (db.posts.company==company)).select()
+        post_list=db((db.posts_pic.board==board)& (db.posts_pic.company==company)).select()
+
+    return dict(post_list=post_list)
+
+def support():
+    board = db(db.boards.title=="Support Group").select().first()
+    post_list=None
+    if auth.user_id is not None:
+        company=db(db.companies.id==auth.user.company).select().first()
+    #print company
+
+   # print posts.com
+        post_list=db((db.posts_pic.board==board)& (db.posts_pic.company==company)).select()
 
     return dict(post_list=post_list)
 

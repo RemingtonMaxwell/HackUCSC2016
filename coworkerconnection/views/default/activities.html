@@ -24,6 +24,48 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery.min.js'></script>
+<script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+    <script>
+        $(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+        //Options and Callbacks for Calendar
+    $('#calendar').fullCalendar({
+        defaultView: 'agendaWeek',
+        selectable: true,
+        editable: true,
+        columnFormat: 'dddd',
+        theme: false,
+		allDaySlot: false,
+        minTime:"08:00:00",
+        maxTime: "22:00:00",
+        contentHeight: 640,
+		eventDurationEditable: false,
+        header:{
+            right:''
+        },
+        select: function(start, end) {
+            var title = prompt('Event Title:');
+            var description=prompt('Event Description')
+            var eventData;
+            if (title) {
+                eventData = {
+                    title: title,
+                    description:description,
+                    start: start,
+                    end: end,
+                    newEvent:true
+                };
+                $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+            }
+        }
+    });
+              });
+    </script>
 
 </head>
 
@@ -59,7 +101,10 @@
                         <a href="activities.html">Activities</a>
                     </li>
                     <li>
-                        <a href="questions.html">Questions</a>
+                        <a href="questions.html">Forum</a>
+                    </li>
+                    <li>
+                        <a href="support.html">Support Groups</a>
                     </li>
                 </ul>
             </div>
@@ -72,33 +117,29 @@
 
         <div class="row">
             <div class="box">
-                <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center">Company
-                        <strong>blog</strong>
-                    </h2>
-                    <hr>
-                </div>
+
+                <div id='calendar'></div>
+                {{if post_list is not None:}}
                 {{for post in post_list:}}
                 <div class="col-lg-12 text-center">
                     <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="">
                     <h2>{{=post.title}}
                         <br>
-                        <small>October 13, 2013</small>
+                        <small>{{=post.created_on}}</small>
                     </h2>
                     <p>{{=post.desc}}</p>
                     <a href="#" class="btn btn-default btn-lg">Read More</a>
                     <hr>
                 </div>
                 {{pass}}
+                {{else:}}
                 <div class="col-lg-12 text-center">
-                    <ul class="pager">
-                        <li class="previous"><a href="#">&larr; Older</a>
-                        </li>
-                        <li class="next"><a href="#">Newer &rarr;</a>
-                        </li>
-                    </ul>
+                    <h2>Please Log in To See Activities for Your Company
+                        <br>
+                    </h2>
+                    <hr>
                 </div>
+                {{pass}}
             </div>
         </div>
 

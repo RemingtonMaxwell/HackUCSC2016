@@ -59,7 +59,10 @@
                         <a href="activities.html">Activities</a>
                     </li>
                     <li>
-                        <a href="questions.html">Questions</a>
+                        <a href="questions.html">Forum</a>
+                    </li>
+                    <li>
+                        <a href="support.html">Support Groups</a>
                     </li>
                 </ul>
             </div>
@@ -79,26 +82,54 @@
                     </h2>
                     <hr>
                 </div>
+                                    </div>
+
+                {{if auth.user is not None:}}
                 {{for post in post_list:}}
+                    <div class="row">
+                        <div class="box">
+                        <div class="col-lg-12">
+                                <p class="comment-info">
+                                    <div class="row">
+                                    <div class="col-lg-10">
+                                        <strong>{{=post.title}}</strong>
+                                    </div>
+                                        <span>{{=post.created_on}}</span>
+                                    </div>
+                                    </p>
+                                        <p>
+                                        {{=post.desc}}
+                                        </p>
+                                    </div>
+                                </div>
+                        </div>
+
+                <div class="row">
+			        <div class="box">
+				        <div class="col-lg-12">
+					        <p class="comment-info">
+                            <div class="row">
+							    <div class="col-lg-10">
+							        <strong>{{=post.title}}</strong>
+							    </div>
+                                <span>{{=post.created_on}}</span>
+						    </div>
+					        </p>
+					        <p>
+                                {{=post.desc}}
+					        </p>
+				        </div>
+			        </div>
+		        </div>
+                {{pass}}
+                {{else:}}
                 <div class="col-lg-12 text-center">
-                    <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="">
-                    <h2>{{=post.title}}
+                    <h2>Please Log in To See Lunch for Your Company
                         <br>
-                        <small>October 13, 2013</small>
                     </h2>
-                    <p>{{=post.desc}}</p>
-                    <a href="#" class="btn btn-default btn-lg">Read More</a>
                     <hr>
                 </div>
                 {{pass}}
-                <div class="col-lg-12 text-center">
-                    <ul class="pager">
-                        <li class="previous"><a href="#">&larr; Older</a>
-                        </li>
-                        <li class="next"><a href="#">Newer &rarr;</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
 
