@@ -30,7 +30,7 @@
 <body>
 
     <div class="brand">Casual Co-Worker Connection</div>
-    <div class="address-bar">3481 Melrose Place | Beverly Hills, CA 90210 | 123.456.7890</div>
+    <div class="address-bar">1156 High Street | Santa Cruz, CA 95064 | 123.456.7890</div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
@@ -74,20 +74,22 @@
     <div class="container">
 
         <div class="row">
+            {{if not auth.user_id is None:}}
             <div class="box">
                 <div class="col-lg-12">
-                    {{if not auth.user_id is None:}}
                         {{=A('Add New Lunch Post', _class='btn btn-default', _href=URL('default','add_post'))}}
-                     {{pass}}
+
                     <hr>
-                    <h2 class="intro-text text-center">Company
-                        <strong>blog</strong>
+                    <h2 class="intro-text text-center">Lunch
+                        <strong>Postings</strong>
                     </h2>
                     <hr>
                 </div>
                                     </div>
+                    {{pass}}
 
                 {{if auth.user is not None:}}
+                {{if post_list is not None:}}
                 {{for post in post_list:}}
                     <div class="row">
                         <div class="box">
@@ -108,31 +110,22 @@
                                 </div>
                         </div>
                 {{pass}}
+                {{pass}}
                 {{else:}}
+                <div class="row">
+                    <div class="box">
                 <div class="col-lg-12 text-center">
                     <h2>Please Log in To See Lunch for Your Company
                         <br>
                     </h2>
                     <hr>
                 </div>
+                        </div></div>
                 {{pass}}
             </div>
         </div>
 
-    </div>
-    <!-- /.container -->
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <p>Copyright &copy; Your Website 2014</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- jQuery -->
 
 
 </body>

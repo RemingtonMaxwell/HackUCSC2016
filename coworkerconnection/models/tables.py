@@ -54,7 +54,7 @@ db.define_table('messages',
                 Field('created_by','reference auth_user', default=auth.user_id),
                 Field('created_by_name','string'),
                 Field('created_on', 'datetime'),
-                Field('title','text'),
+                Field('title','string'),
                 Field('desc', 'text'),
                 )
 db.define_table('messagesActivity',
@@ -63,7 +63,7 @@ db.define_table('messagesActivity',
                 Field('created_by','reference auth_user', default=auth.user_id),
                 Field('created_by_name','string'),
                 Field('created_on', 'datetime'),
-                Field('title','text'),
+                Field('title','string'),
                 Field('desc', 'text'),
                 )
 
@@ -73,7 +73,7 @@ db.define_table('messagesSupport',
                 Field('created_by','reference auth_user', default=auth.user_id),
                 Field('created_by_name','string'),
                 Field('created_on', 'datetime'),
-                Field('title','text'),
+                Field('title','string'),
                 Field('desc', 'text'),
                 )
 

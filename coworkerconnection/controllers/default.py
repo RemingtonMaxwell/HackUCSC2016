@@ -102,15 +102,19 @@ def lunch():
     board = db(db.boards.title=="Lunch").select().first()  #only lunch posts
     print board
     #company=db(db.posts.company==auth.user.company).select().first()
-   # print company
-    post_list=db(db.posts.board==board).select(orderby=~db.posts.created_on)
+    post_list=None
+    if not auth.user_id is None:
+        company=db(db.companies.id==auth.user.company).select().first()
+        post_list=db((db.posts.board==board)& (db.posts.company==company)).select(orderby=~db.posts.created_on)
+
     return dict(post_list=post_list)
 
 def questions():
     board = db(db.boards.title=="Forum").select().first()  # get post ID from request
     post_list=db(db.posts.board==board).select(orderby=~db.posts.created_on)
     form=SQLFORM(db.posts, fields=['title','desc'])
-    form.vars.company=auth.user.company
+    if not auth.user_id is None:
+        form.vars.company=auth.user.company
     form.vars.board=db(db.boards.title=='Forum').select().first()
     if form.process().accepted:
         #session.flash=T('The post has been added')

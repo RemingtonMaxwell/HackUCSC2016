@@ -41,7 +41,7 @@
 		eventDurationEditable: false
     });
         var i=0;
-        {{if post_list is not None:}}
+        {{if not auth.user_id is None:}}
         {{for post in post_list:}}
             var cal={{=XML(calendar)}}
         //alert(cal[i]);
@@ -67,7 +67,7 @@
 <body>
 
     <div class="brand">Casual Co-Worker Connection</div>
-    <div class="address-bar">3481 Melrose Place | Beverly Hills, CA 90210 | 123.456.7890</div>
+    <div class="address-bar">1156 High Street | Santa Cruz, CA 95064 | 123.456.7890</div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
@@ -113,12 +113,22 @@
         <div class="row">
             <div class="box">
                 <div class="col-lg-12">
-                    <hr>
+
+                    <div class="col-lg-12">
                     {{if not auth.user_id is None:}}
+                        <hr>
                         {{=A('Add New Support Group', _class='btn btn-default', _href=URL('default','add_post_support'))}}
-                     {{pass}}
+
+                    <hr>
+                    <h2 class="intro-text text-center">Support Group
+                        <strong>Postings</strong>
+                    </h2>
+                    <hr>
+                        {{pass}}
+                </div>
                     <hr>
                 </div>
+                {{if not auth.user_id is None:}}
                 <div id='calendar'></div>
                 {{if post_list is not None:}}
                 {{for post in post_list:}}
@@ -134,7 +144,9 @@
                     <hr>
                 </div>
                 {{pass}}
+                {{pass}}
                 {{else:}}
+
                 <div class="col-lg-12 text-center">
                     <h2>Please Log in To See Support Groups for Your Company
                         <br>
@@ -146,19 +158,7 @@
         </div>
 
     </div>
-    <!-- /.container -->
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <p>Copyright &copy; Your Website 2014</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- jQuery -->
 
 
 </body>
