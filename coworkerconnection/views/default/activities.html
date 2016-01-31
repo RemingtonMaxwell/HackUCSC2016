@@ -57,7 +57,7 @@
                 title: cal[i]['title'],
                 start: new Date(cal[i]['start_time']),
                 end:new Date(cal[i]['end_time']),
-                url: "#"+cal[i]['title'],
+                url: "#"+cal[i]['post_id'],
 
             };
             $('#calendar').fullCalendar( 'renderEvent', newEvent , 'stick');
@@ -127,13 +127,14 @@
                         <strong>Postings</strong>
                     </h2>
                     <hr>
+                        <h2 class="intro-text text-center">Click Events to Scroll to their Post.</h2>
                 </div>
                 <div id='calendar'></div>
         <div class="hs"></div>
                 {{if post_list is not None:}}
                 {{for post in post_list:}}
                 <div class="col-lg-12 text-center separator">
-                    <a name={{=post.title}}></a>
+                    <a name={{=post.post_id}}></a>
                     <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="" >
                     <h2>{{=post.title}}
                         <br>
