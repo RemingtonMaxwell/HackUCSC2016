@@ -40,15 +40,13 @@
         editable: true,
         columnFormat: 'dddd',
         theme: false,
-		allDaySlot: false,
-        minTime:"08:00:00",
-        maxTime: "22:00:00",
         contentHeight: 640,
 		eventDurationEditable: false,
         header:{
             right:''
         },
         select: function(start, end) {
+            alert(start);
             var title = prompt('Event Title:');
             var description=prompt('Event Description')
             var eventData;
@@ -64,7 +62,23 @@
             }
         }
     });
-              });
+        var i=0;
+        {{for post in post_list:}}
+            var cal={{=XML(calendar)}}
+        //alert(cal[i]);
+    var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+            var newEvent = {
+                title: cal[i]['title'],
+                start: new Date(cal[i]['start_time']),
+                end:new Date(cal[i]['end_time'])
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , 'stick');
+        i++;
+        {{pass}}
+         });
     </script>
 
 </head>
@@ -117,7 +131,11 @@
 
         <div class="row">
             <div class="box">
-
+{{if not auth.user_id is None:}}
+    {{=A('Create New Post', _class='btn btn-success', _href=URL('default','add_post_activity'))}}
+{{pass}}
+    <br>
+    <br>
                 <div id='calendar'></div>
                 {{if post_list is not None:}}
                 {{for post in post_list:}}

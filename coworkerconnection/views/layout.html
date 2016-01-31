@@ -73,9 +73,6 @@
     {{=A('Logout', _class='btn btn-primary', _href=URL('default', 'user', args=['logout']))}}
 {{pass}}
         {{=A('Home Page', _class='btn btn-info', _href=URL('default', 'index'))}}
-{{if not auth.user_id is None:}}
-    {{=A('Create New Post', _class='btn btn-success', _href=URL('default','add_post'))}}
-{{pass}}
                         </div>
     </div>
     </div>

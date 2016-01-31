@@ -21,12 +21,27 @@ db.define_table('posts',
                 Field('company', 'reference companies', requires=IS_IN_DB(db,db.companies,'%(name)s')),#, default=auth.user.company),
                 )
 
-db.define_table('posts_pic',
+db.define_table('activities',
                 Field('post_id', default = web2py_uuid(), readable=False, writable=False),
                 Field('title','text'),
                 Field('desc', 'text'),
                 Field('created_on', 'datetime'),
-                Field('board', 'reference boards', requires=IS_IN_DB(db((db.boards.title=='Activity') |(db.boards.title=='Support Group')),db.boards,'%(title)s')),
+                Field('start_time','datetime'),
+                Field('end_time','datetime'),
+                Field('board', 'reference boards', requires=IS_IN_DB(db((db.boards.title=='Activity')),db.boards,'%(title)s')),
+                Field('image', type='upload', requires = IS_IMAGE(extensions=('jpeg', 'png'))),
+                Field('created_by','reference auth_user', default=auth.user_id),
+                Field('stars','integer'),
+                Field('company', 'reference companies', requires=IS_IN_DB(db,db.companies,'%(name)s')),#, default=auth.user.company),
+                )
+db.define_table('support',
+                Field('post_id', default = web2py_uuid(), readable=False, writable=False),
+                Field('title','text'),
+                Field('desc', 'text'),
+                Field('created_on', 'datetime'),
+                Field('start_time','datetime'),
+                Field('end_time','datetime'),
+                Field('board', 'reference boards', requires=IS_IN_DB(db((db.boards.title=='Support Group')),db.boards,'%(title)s')),
                 Field('image', type='upload', requires = IS_IMAGE(extensions=('jpeg', 'png'))),
                 Field('created_by','reference auth_user', default=auth.user_id),
                 Field('stars','integer'),
@@ -34,8 +49,9 @@ db.define_table('posts_pic',
                 )
 
 
-
 db.posts.created_on.default=datetime.utcnow()
-db.posts_pic.created_on.default=datetime.utcnow()
+db.activities.created_on.default=datetime.utcnow()
+db.support.created_on.default=datetime.utcnow()
+
 
 

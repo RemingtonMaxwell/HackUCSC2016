@@ -7,6 +7,7 @@
 ## - user is required for authentication and authorization
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
+from gluon.serializers import json
 
 def index():
     """
@@ -23,6 +24,14 @@ def index():
 def add_post():
     form=SQLFORM(db.posts, fields=['title', 'desc','image', 'board'])
     form.vars.company=auth.user.company
+    if form.process().accepted:
+        session.flash=T('The post has been added')
+        redirect(URL('default', 'index'))
+    return dict(form=form)
+def add_post_activity():
+    form=SQLFORM(db.activities, fields=['title', 'desc','image', 'start_time','end_time'])
+    form.vars.company=auth.user.company
+    form.vars.board=db(db.boards.title=='Activity').select().first()
     if form.process().accepted:
         session.flash=T('The post has been added')
         redirect(URL('default', 'index'))
@@ -51,9 +60,9 @@ def activities():
     #print company
 
    # print posts.com
-        post_list=db((db.posts_pic.board==board)& (db.posts_pic.company==company)).select()
+        post_list=db((db.activities.board==board)& (db.activities.company==company)).select()
 
-    return dict(post_list=post_list)
+    return dict(post_list=post_list,calendar=json(post_list))
 
 def support():
     board = db(db.boards.title=="Support Group").select().first()
@@ -63,7 +72,7 @@ def support():
     #print company
 
    # print posts.com
-        post_list=db((db.posts_pic.board==board)& (db.posts_pic.company==company)).select()
+        post_list=db((db.support.board==board)& (db.support.company==company)).select()
 
     return dict(post_list=post_list)
 
