@@ -18,12 +18,49 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
+ <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery.min.js'></script>
+<script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+    <script>
+        $(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+        //Options and Callbacks for Calendar
+    $('#calendar').fullCalendar({
+        defaultView: 'agendaWeek',
+        selectable: true,
+        editable: true,
+        columnFormat: 'dddd',
+        theme: false,
+        contentHeight: 640,
+		eventDurationEditable: false
+    });
+        var i=0;
+        {{if post_list is not None:}}
+        {{for post in post_list:}}
+            var cal={{=XML(calendar)}}
+        //alert(cal[i]);
+    var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+            var newEvent = {
+                title: cal[i]['title'],
+                start: new Date(cal[i]['start_time']),
+                end:new Date(cal[i]['end_time']),
+                url: "#"+cal[i]['title'],
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , 'stick');
+        i++;
+        {{pass}}
+            {{pass}}
+         });
+    </script>
 
 </head>
 
@@ -76,41 +113,30 @@
         <div class="row">
             <div class="box">
                 <div class="col-lg-12">
+                    <hr>
                     {{if not auth.user_id is None:}}
-                        {{=A('Add New Lunch Post', _class='btn btn-default', _href=URL('default','add_post'))}}
+                        {{=A('Add New Support Group', _class='btn btn-default', _href=URL('default','add_post_support'))}}
                      {{pass}}
                     <hr>
-                    <h2 class="intro-text text-center">Company
-                        <strong>blog</strong>
+                </div>
+                <div id='calendar'></div>
+                {{if post_list is not None:}}
+                {{for post in post_list:}}
+                <a name={{=post.title}}></a>
+                <div class="col-lg-12 text-center separator">
+                    <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="">
+                    <h2>{{=post.title}}
+                        <br>
+                        <small>{{=post.created_on}}</small>
                     </h2>
+                    <p>{{=post.desc}}</p>
+                    <a href="#" class="btn btn-default btn-lg">Read More</a>
                     <hr>
                 </div>
-                                    </div>
-
-                {{if auth.user is not None:}}
-                {{for post in post_list:}}
-                    <div class="row">
-                        <div class="box">
-                        <div class="col-lg-12">
-                                <p class="comment-info">
-                                    <div class="row">
-                                    <div class="col-lg-10">
-                                        <strong>{{=post.title}}</strong>
-                                    </div>
-                                        <span>{{=post.created_on}}</span>
-                                    </div>
-                                    </p>
-                                        <p>
-                                        {{=post.desc}}
-                                        </p>
-                                    {{=A(SPAN("Read More"), _class='btn btn-default btn-lg', _href=URL('default', 'show_messages_lunch', args=[post.post_id]))}}
-                                    </div>
-                                </div>
-                        </div>
                 {{pass}}
                 {{else:}}
                 <div class="col-lg-12 text-center">
-                    <h2>Please Log in To See Lunch for Your Company
+                    <h2>Please Log in To See Support Groups for Your Company
                         <br>
                     </h2>
                     <hr>

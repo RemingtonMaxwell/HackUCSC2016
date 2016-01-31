@@ -150,22 +150,16 @@
                     </h2>
                     <hr>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, vitae, distinctio, possimus repudiandae cupiditate ipsum excepturi dicta neque eaque voluptates tempora veniam esse earum sapiente optio deleniti consequuntur eos voluptatem.</p>
-                    <form role="form">
                         <div class="row">
                             <div class="clearfix"></div>
-                            <div class="form-group col-lg-12">
-                                <label>Notification</label>
-                                <textarea class="form-control" rows="6"></textarea>
-                            </div>
-                            <div class="form-group col-lg-12">
-                                <input type="hidden" name="save" value="contact">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                            <div class="form-group col-lg-12 text-center">
+                               {{=form}}</div>
+                                <div class=""></div>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
-        </div>
+
 
 		<div class="row">
             <div class="box">
@@ -179,94 +173,43 @@
                 </div>
             </div>
         </div>
-		<!-- Begin Feedback and Post a Comment-->
-		<div class="feedback">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h1>feedback</h1>
-                                        <div class="cmnt-clipboard"><span class="btn-clipboard">Reply</span></div>
-                                        <div class="well">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <img src="assets/img/commenter1.jpg" class="img-responsive center-block">
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <p class="comment-info">
-                                                        <strong>Reena Scot</strong> <span>22 april 2015</span>
-                                                    </p>
-                                                    <p>
-                                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since they 1500s.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="cmnt-clipboard"><span class="btn-clipboard">Reply</span></div>
-                                        <div class="well">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <img src="assets/img/commenter2.jpg" class="img-responsive center-block">
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <p class="comment-info">
-                                                        <strong>David Martin</strong> <span>22 april 2015</span>
-                                                    </p>
-                                                    <p>
-                                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since they 1500s.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+		<!-- Begin Feedback and Post a Comment-->
+        {{if auth.user is not None:}}
+                {{for post in post_list:}}
+                    <div class="row">
+                        <div class="box">
+                        <div class="col-lg-12">
+                                <p class="comment-info">
+                                    <div class="row">
+                                    <div class="col-lg-10">
+                                        <strong>{{=post.title}}</strong>
+                                    </div>
+                                        <span>{{=post.created_on}}</span>
+                                    </div>
+                                    </p>
+                                        <p>
+                                        {{=post.desc}}
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="comment-post">
-                                <h1>post a comment</h1>
-                                <form method="post" >
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input  name="name" type="text" class="form-control" id="name" required="required" placeholder="Full Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input name="email" type="email" class="form-control" id="email" required="required" placeholder="Email Address">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input name="website" type="url" class="form-control" id="subject" required="required" placeholder="Your Website">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <textarea name="message" type="text" class="form-control" id="message" rows="5" required="required" placeholder="Type here message"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" required="required"> Please Check to Confirm
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="submit" id="submit" name="submit" class="btn btn-cmnt">post comment</button>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
+                    </div>
+                {{pass}}
+                {{else:}}
+                <div class="col-lg-12 text-center">
+                    <h2>Please Log in To See Lunch for Your Company
+                        <br>
+                    </h2>
+                    <hr>
+                </div>
+                {{pass}}
 
                     </div>
                 </div>
             </section>
         </main>
 		<!-- End Feedback and Post a Comment-->
-
+    </div>
     </div>
     <!-- /.container -->
 

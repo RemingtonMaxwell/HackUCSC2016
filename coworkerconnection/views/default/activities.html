@@ -30,41 +30,23 @@
 <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
     <script>
         $(document).ready(function() {
-
     // page is now ready, initialize the calendar...
 
         //Options and Callbacks for Calendar
     $('#calendar').fullCalendar({
         defaultView: 'agendaWeek',
         selectable: true,
-        editable: true,
+        editable: false,
         columnFormat: 'dddd',
         theme: false,
         contentHeight: 640,
-		eventDurationEditable: false,
-        header:{
-            right:''
-        },
-        select: function(start, end) {
-            alert(start);
-            var title = prompt('Event Title:');
-            var description=prompt('Event Description')
-            var eventData;
-            if (title) {
-                eventData = {
-                    title: title,
-                    description:description,
-                    start: start,
-                    end: end,
-                    newEvent:true
-                };
-                $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-            }
-        }
+		eventDurationEditable: false
     });
+            $('#calendar').fullCalendar('removeEvents');
         var i=0;
         {{for post in post_list:}}
             var cal={{=XML(calendar)}}
+
         //alert(cal[i]);
     var date = new Date();
         var d = date.getDate();
@@ -73,7 +55,9 @@
             var newEvent = {
                 title: cal[i]['title'],
                 start: new Date(cal[i]['start_time']),
-                end:new Date(cal[i]['end_time'])
+                end:new Date(cal[i]['end_time']),
+                url: "#"+cal[i]['title'],
+
             };
             $('#calendar').fullCalendar( 'renderEvent', newEvent , 'stick');
         i++;
@@ -132,15 +116,16 @@
         <div class="row">
             <div class="box">
 {{if not auth.user_id is None:}}
-    {{=A('Create New Post', _class='btn btn-success', _href=URL('default','add_post_activity'))}}
+    {{=A('Create New Post', _class='btn btn-default', _href=URL('default','add_post_activity'))}}
 {{pass}}
-    <br>
-    <br>
+
                 <div id='calendar'></div>
+        <div class="hs"></div>
                 {{if post_list is not None:}}
                 {{for post in post_list:}}
-                <div class="col-lg-12 text-center">
-                    <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="">
+                <div class="col-lg-12 text-center separator">
+                    <a name={{=post.title}}></a>
+                    <img class="img-responsive img-border img-full" src="{{=URL('download', args=post.image)}}" alt="" >
                     <h2>{{=post.title}}
                         <br>
                         <small>{{=post.created_on}}</small>

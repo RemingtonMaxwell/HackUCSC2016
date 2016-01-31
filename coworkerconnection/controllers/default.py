@@ -21,20 +21,44 @@ def index():
     post_list=db(db.posts).select()
     return dict(message=T('Welcome to web2py!'), board_list=board_list, post_list=post_list)
 
+def show_messages_lunch():
+    post=db(db.posts.post_id==request.args(0)).select().first()
+    msg_list=None
+    if auth.user_id is not None:
+        msg_list=db(db.messages.post==post).select(orderby=~db.messages.created_on)
+    return dict(msg_list=msg_list, post=post)
+
 def add_post():
-    form=SQLFORM(db.posts, fields=['title', 'desc','image', 'board'])
+    form=SQLFORM(db.posts, fields=['title', 'desc'])
     form.vars.company=auth.user.company
+    form.vars.board=db(db.boards.title=='Lunch').select().first()
     if form.process().accepted:
-        session.flash=T('The post has been added')
-        redirect(URL('default', 'index'))
+        redirect(URL('default', 'lunch'))
     return dict(form=form)
+
+def add_lunch_msg():
+    form=SQLFORM(db.messages, fields=['title', 'desc'])
+    post=db(db.posts.post_id==request.args(0)).select().first()
+    form.vars.post=post
+    print request.args(0)
+    if form.process().accepted:
+        redirect(URL('default', 'show_messages_lunch',args=[post.post_id]))
+    return dict(form=form)
+
 def add_post_activity():
     form=SQLFORM(db.activities, fields=['title', 'desc','image', 'start_time','end_time'])
     form.vars.company=auth.user.company
     form.vars.board=db(db.boards.title=='Activity').select().first()
     if form.process().accepted:
-        session.flash=T('The post has been added')
-        redirect(URL('default', 'index'))
+        redirect(URL('default', 'activity'))
+    return dict(form=form)
+
+def add_post_support():
+    form=SQLFORM(db.support, fields=['title', 'desc','image', 'start_time','end_time'])
+    form.vars.company=auth.user.company
+    form.vars.board=db(db.boards.title=='Support Group').select().first()
+    if form.process().accepted:
+        redirect(URL('default', 'support'))
     return dict(form=form)
 
 def lunch():
@@ -42,14 +66,19 @@ def lunch():
     print board
     #company=db(db.posts.company==auth.user.company).select().first()
    # print company
-    post_list=db(db.posts.board==board).select()
+    post_list=db(db.posts.board==board).select(orderby=~db.posts.created_on)
     return dict(post_list=post_list)
 
 def questions():
     board = db(db.boards.title=="Forum").select().first()  # get post ID from request
-    print board
-    post_list=db(db.posts.board==board).select()
-    return dict()
+    post_list=db(db.posts.board==board).select(orderby=~db.posts.created_on)
+    form=SQLFORM(db.posts, fields=['title','desc'])
+    form.vars.company=auth.user.company
+    form.vars.board=db(db.boards.title=='Forum').select().first()
+    if form.process().accepted:
+        #session.flash=T('The post has been added')
+        redirect(URL('default', 'questions'))
+    return dict(post_list=post_list,form=form)
 
 def activities():
     board = db(db.boards.title=="Activity").select().first()  # get post ID from request
@@ -57,11 +86,8 @@ def activities():
     post_list=None
     if auth.user_id is not None:
         company=db(db.companies.id==auth.user.company).select().first()
-    #print company
-
-   # print posts.com
-        post_list=db((db.activities.board==board)& (db.activities.company==company)).select()
-
+        post_list=db((db.activities.board==board)& (db.activities.company==company)).select(orderby=~db.activities.created_on)
+    #print json(post_list)
     return dict(post_list=post_list,calendar=json(post_list))
 
 def support():
@@ -69,12 +95,8 @@ def support():
     post_list=None
     if auth.user_id is not None:
         company=db(db.companies.id==auth.user.company).select().first()
-    #print company
-
-   # print posts.com
-        post_list=db((db.support.board==board)& (db.support.company==company)).select()
-
-    return dict(post_list=post_list)
+        post_list=db((db.support.board==board)& (db.support.company==company)).select(orderby=~db.support.created_on)
+    return dict(post_list=post_list,calendar=json(post_list))
 
 def user():
     """

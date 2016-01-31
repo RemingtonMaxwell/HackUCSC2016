@@ -54,7 +54,7 @@ hr {
 }
 
 .img-full {
-    min-width: 100%;
+    max-width: 50%;
 }
 
 .brand-before,
@@ -189,4 +189,16 @@ footer p {
         display: table;
         clear: both;
     }
+}
+
+.hs{
+    height:100px;
+}
+
+.separator{
+    border-bottom: 2px solid #c09853;
+    padding-top:20px;
+}
+.hidden{
+    display:None;
 }
