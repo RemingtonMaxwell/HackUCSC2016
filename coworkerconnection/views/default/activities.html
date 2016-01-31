@@ -44,7 +44,7 @@
     });
             $('#calendar').fullCalendar('removeEvents');
         var i=0;
-
+{{if not auth.user_id is None:}}
         {{for post in post_list:}}
             var cal={{=XML(calendar)}}
 
@@ -63,6 +63,7 @@
             $('#calendar').fullCalendar( 'renderEvent', newEvent , 'stick');
         i++;
         {{pass}}
+            {{pass}}
          });
     </script>
 

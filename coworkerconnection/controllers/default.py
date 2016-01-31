@@ -125,7 +125,7 @@ def activities():
     board = db(db.boards.title=="Activity").select().first()  # get post ID from request
    # print board
     post_list=None
-    if auth.user_id is not None:
+    if not auth.user_id is None:
         company=db(db.companies.id==auth.user.company).select().first()
         post_list=db((db.activities.board==board)& (db.activities.company==company)).select(orderby=~db.activities.created_on)
     #print json(post_list)
