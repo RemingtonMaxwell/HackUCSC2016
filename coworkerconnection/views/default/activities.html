@@ -131,7 +131,7 @@
                         <small>{{=post.created_on}}</small>
                     </h2>
                     <p>{{=post.desc}}</p>
-                    <a href="#" class="btn btn-default btn-lg">Read More</a>
+                    {{=A(SPAN("Read More"), _class='btn btn-default btn-lg', _href=URL('default', 'show_messages_activities', args=[post.post_id]))}}
                     <hr>
                 </div>
                 {{pass}}

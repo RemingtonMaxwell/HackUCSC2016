@@ -82,7 +82,7 @@
                                     <div class="row">
                                     <div class="col-lg-10">
                                     {{if not auth.user_id is None:}}
-                                    {{=A('Respond to Post', _class='btn btn-default', _href=URL('default','add_lunch_msg', args=[post.post_id]))}}
+                                    {{=A('Respond to Post', _class='btn btn-default', _href=URL('default','add_activities_msg', args=[post.post_id]))}}
                                     {{pass}}
                                         <br>
                                         <br>

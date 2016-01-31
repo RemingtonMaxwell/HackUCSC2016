@@ -52,7 +52,26 @@ db.define_table('messages',
                 Field('msg_id', default = web2py_uuid(), readable=False, writable=False),
                 Field('post', 'reference posts', requires=IS_IN_DB(db,db.posts,'%(title)s')),
                 Field('created_by','reference auth_user', default=auth.user_id),
-                Field('created_by_name','string', default=auth.user.name),
+                Field('created_by_name','string'),
+                Field('created_on', 'datetime'),
+                Field('title','text'),
+                Field('desc', 'text'),
+                )
+db.define_table('messagesActivity',
+                Field('msg_id', default = web2py_uuid(), readable=False, writable=False),
+                Field('post', 'reference activities', requires=IS_IN_DB(db,db.activities,'%(title)s')),
+                Field('created_by','reference auth_user', default=auth.user_id),
+                Field('created_by_name','string'),
+                Field('created_on', 'datetime'),
+                Field('title','text'),
+                Field('desc', 'text'),
+                )
+
+db.define_table('messagesSupport',
+                Field('msg_id', default = web2py_uuid(), readable=False, writable=False),
+                Field('post', 'reference support', requires=IS_IN_DB(db,db.support,'%(title)s')),
+                Field('created_by','reference auth_user', default=auth.user_id),
+                Field('created_by_name','string'),
                 Field('created_on', 'datetime'),
                 Field('title','text'),
                 Field('desc', 'text'),
@@ -66,6 +85,10 @@ db.support.start_time.default=datetime.utcnow()
 db.activities.end_time.default=datetime.utcnow()
 db.support.end_time.default=datetime.utcnow()
 db.messages.created_on.default=datetime.utcnow()
+db.messagesActivity.created_on.default=datetime.utcnow()
+db.messagesSupport.created_on.default=datetime.utcnow()
+
+
 
 
 

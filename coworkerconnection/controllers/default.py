@@ -23,10 +23,28 @@ def index():
 
 def show_messages_lunch():
     post=db(db.posts.post_id==request.args(0)).select().first()
+    creator=db(db.auth_user.id==post.created_by).select().first()
+    print creator.name
     msg_list=None
     if auth.user_id is not None:
         msg_list=db(db.messages.post==post).select(orderby=~db.messages.created_on)
-    return dict(msg_list=msg_list, post=post)
+    return dict(msg_list=msg_list, post=post, creator=creator.name)
+
+def show_messages_support():
+    post=db(db.support.post_id==request.args(0)).select().first()
+    creator=db(db.auth_user.id==post.created_by).select().first()
+    msg_list=None
+    if auth.user_id is not None:
+        msg_list=db(db.messagesSupport.post==post).select(orderby=~db.messagesSupport.created_on)
+    return dict(msg_list=msg_list, post=post, creator=creator.name)
+
+def show_messages_activities():
+    post=db(db.activities.post_id==request.args(0)).select().first()
+    creator=db(db.auth_user.id==post.created_by).select().first()
+    msg_list=None
+    if auth.user_id is not None:
+        msg_list=db(db.messagesActivity.post==post).select(orderby=~db.messagesActivity.created_on)
+    return dict(msg_list=msg_list, post=post, creator=creator.name)
 
 def add_post():
     form=SQLFORM(db.posts, fields=['title', 'desc'])
@@ -36,10 +54,29 @@ def add_post():
         redirect(URL('default', 'lunch'))
     return dict(form=form)
 
+def add_support_msg():
+    form=SQLFORM(db.messagesSupport, fields=['title', 'desc'])
+    post=db(db.support.post_id==request.args(0)).select().first()
+    form.vars.post=post
+    form.vars.created_by_name=auth.user.name
+    if form.process().accepted:
+        redirect(URL('default', 'show_messages_support',args=[post.post_id]))
+    return dict(form=form)
+
+def add_activities_msg():
+    form=SQLFORM(db.messagesActivity, fields=['title', 'desc'])
+    post=db(db.activities.post_id==request.args(0)).select().first()
+    form.vars.post=post
+    form.vars.created_by_name=auth.user.name
+    if form.process().accepted:
+        redirect(URL('default', 'show_messages_activities',args=[post.post_id]))
+    return dict(form=form)
+
 def add_lunch_msg():
     form=SQLFORM(db.messages, fields=['title', 'desc'])
     post=db(db.posts.post_id==request.args(0)).select().first()
     form.vars.post=post
+    form.vars.created_by_name=auth.user.name
     print request.args(0)
     if form.process().accepted:
         redirect(URL('default', 'show_messages_lunch',args=[post.post_id]))
@@ -50,7 +87,7 @@ def add_post_activity():
     form.vars.company=auth.user.company
     form.vars.board=db(db.boards.title=='Activity').select().first()
     if form.process().accepted:
-        redirect(URL('default', 'activity'))
+        redirect(URL('default', 'activities'))
     return dict(form=form)
 
 def add_post_support():
